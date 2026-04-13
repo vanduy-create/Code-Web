@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MYKiNGDOM - Thế Giới Lego Chính Hãng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #ee4d2d; --secondary: #fbb03b; --dark: #222; --light: #f4f4f4; }
+        body { font-family: 'Be Vietnam Pro', sans-serif; margin: 0; padding: 0; background: var(--light); color: var(--dark); overflow-x: hidden; }
+        
+        /* Header & Navigation */
+        header { background: white; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { font-weight: 800; font-size: 28px; color: var(--primary); cursor: pointer; letter-spacing: -1px; }
+        .search-bar { display: flex; flex: 0.6; }
+        .search-bar input { padding: 10px; width: 100%; border: 1px solid #ddd; border-radius: 4px 0 0 4px; outline: none; }
+        .search-bar button { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 0 4px 4px 0; cursor: pointer; font-weight: bold; }
+        
+        nav { background: white; text-align: center; padding: 12px; border-bottom: 1px solid #eee; }
+        nav a { margin: 0 15px; text-decoration: none; color: var(--dark); font-weight: 600; cursor: pointer; font-size: 14px; text-transform: uppercase; transition: 0.3s; }
+        nav a:hover, nav a.active-link { color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 4px; }
+
+        /* Page Management */
+        .page { display: none; padding: 20px 5%; min-height: 80vh; animation: slideUp 0.4s ease-out; }
+        .active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Home Page */
+        .banner { width: 100%; height: 400px; border-radius: 12px; margin-bottom: 30px; overflow: hidden; position: relative; }
+        .banner img { width: 100%; height: 100%; object-fit: cover; }
+        .banner-text { position: absolute; top: 50%; left: 5%; transform: translateY(-50%); color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+
+        .home-layout { display: flex; gap: 25px; }
+        .sidebar { width: 250px; background: white; padding: 20px; border-radius: 10px; height: fit-content; }
+        .sidebar h3 { margin-top: 0; border-bottom: 2px solid var(--primary); padding-bottom: 10px; font-size: 18px; text-transform: uppercase; }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: 0.2s; }
+        .sidebar li:hover { color: var(--primary); padding-left: 5px; }
+
+        /* Product Grid */
+        .section-title { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 25px; text-transform: uppercase; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; flex: 1; }
+        .product-card { background: white; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; border: 1px solid transparent; }
+        .product-card:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.1); transform: translateY(-5px); border-color: var(--secondary); }
+        .product-card img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 15px; }
+        .product-card h4 { margin: 10px 0; font-size: 15px; height: 40px; overflow: hidden; }
+        .price { color: var(--primary); font-weight: 700; font-size: 18px; }
+
+        /* Auth Pages */
+        .auth-container { max-width: 450px; margin: 40px auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-top: 5px solid var(--primary); }
+        .auth-container h2 { text-align: center; margin-bottom: 30px; color: var(--dark); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-family: 'Be Vietnam Pro', sans-serif; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 16px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #d33a1b; }
+        .btn-secondary { background: var(--secondary); color: white; margin-top: 10px; }
+
+        /* Cart & Table */
+        .cart-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; margin-top: 20px; }
+        .cart-table th { background: #f8f8f8; padding: 15px; text-align: left; }
+        .cart-table td { padding: 15px; border-bottom: 1px solid #eee; }
+        .cart-img { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; }
+
+        /* Footer */
+        footer { background: var(--dark); color: white; padding: 50px 5%; margin-top: 60px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+        footer h4 { color: var(--secondary); margin-bottom: 20px; }
+        footer p { font-size: 14px; opacity: 0.8; line-height: 1.8; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="showPage('home')">MYKINGDOM</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Tìm kiếm Lego Technic, City, Ninjago...">
+            <button>TÌM KIẾM</button>
+        </div>
+        <div class="user-actions">
+            <span onclick="showPage('cart')" style="cursor:pointer; margin-right:15px">🛒 Giỏ hàng (<b>1</b>)</span>
+            <span onclick="showPage('login')" style="cursor:pointer">👤 Tài khoản</span>
+        </div>
+    </header>
+
+    <nav id="main-nav">
+        <a onclick="showPage('home', this)" class="active-link">Trang chủ</a>
+        <a onclick="showPage('new-products', this)">Sản phẩm mới</a>
+        <a onclick="showPage('best-sellers', this)">Bán chạy</a>
+        <a onclick="showPage('contact', this)">Liên hệ</a>
+    </nav>
+
+    <div id="home" class="page active">
+        <div class="banner">
+            <img src="https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?auto=format&fit=crop&w=1200&q=80" alt="Lego Banner">
+            <div class="banner-text">
+                <h1>THẾ GIỚI LEGO CHÍNH HÃNG</h1>
+                <p>Khám phá hàng ngàn bộ lắp ráp sáng tạo cho mọi lứa tuổi</p>
+                <button class="btn btn-primary" style="width:auto; padding: 10px 30px" onclick="showPage('best-sellers', document.querySelectorAll('nav a')[2])">XEM NGAY</button>
+            </div>
+        </div>
+
+        <div class="home-layout">
+            <aside class="sidebar">
+                <h3>DANH MỤC LỚN</h3>
+                <ul>
+                    <li>Lego Technic</li>
+                    <li>Lego Ninjago</li>
+                    <li>Lego Star Wars</li>
+                    <li>Lego City</li>
+                    <li>Lego Creator</li>
+                </ul>
+            </aside>
+            <main style="flex:1">
+                <h2 class="section-title">Sản phẩm nổi bật</h2>
+                <div class="product-grid">
+                    <div class="product-card" onclick="showPage('detail')">
+                        <img src="feraari.jpg" alt="Lego">
+                        <h4>Siêu Xe Ferrari Technic 42125</h4>
+                        <p class="price">3.450.000đ</p>
+                        <button class="btn btn-secondary">Thêm vào giỏ</button>
+                    </div>
+                    <div class="product-card" onclick="showPage('detail')">
+                        <img src="tr.jpg" alt="Lego">
+                        <h4>Trạm Cảnh Sát Thành Phố 60141</h4>
+                        <p class="price">1.890.000đ</p>
+                        <button class="btn btn-secondary">Thêm vào giỏ</button>
+                    </div>
+                    <div class="product-card" onclick="showPage('detail')">
+                        <img src="https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&w=300&q=80" alt="Lego">
+                        <h4>Tàu Thăm Dò Đại Dương</h4>
+                        <p class="price">950.000đ</p>
+                        <button class="btn btn-secondary">Thêm vào giỏ</button>
+                    </div>
+                    <div class="product-card" onclick="showPage('detail')">
+                        <img src="https://images.unsplash.com/photo-1472457897821-70d3819a0e24?auto=format&fit=crop&w=300&q=80" alt="Lego">
+                        <h4>Mô Hình Robot Biến Hình</h4>
+                        <p class="price">620.000đ</p>
+                        <button class="btn btn-secondary">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="new-products" class="page">
+        <div class="banner" style="height: 200px;">
+            <img src="https://images.unsplash.com/photo-1599623560574-39d485900c95?auto=format&fit=crop&w=1200&q=80" alt="New Lego">
+            <div class="banner-text">
+                <h1 style="color:var(--secondary); text-shadow: none; background: rgba(255,255,255,0.9); padding: 10px 20px; border-radius: 8px;">🔥 HÀNG MỚI VỀ THÁNG NÀY</h1>
+            </div>
+        </div>
+        <div class="product-grid" style="grid-template-columns: repeat(5, 1fr);">
+            <div class="product-card" onclick="showPage('detail')">
+                <img src="tch.jpg" alt="Lego">
+                <h4>Tàu Chiến Star Wars Millennium Falcon</h4>
+                <p class="price">5.200.000đ</p>
+                <button class="btn btn-secondary">Thêm vào giỏ</button>
+            </div>
+            <div class="product-card" onclick="showPage('detail')">
+                <img src="ld.jpg" alt="Lego">
+                <h4>Lâu Đài Hogwarts Harry Potter</h4>
+                <p class="price">4.800.000đ</p>
+                <button class="btn btn-secondary">Thêm vào giỏ</button>
+            </div>
+            <div class="product-card" onclick="showPage('detail')">
+                <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=300&q=80" alt="Lego">
+                <h4>Trực Thăng Cứu Hộ Technic</h4>
+                <p class="price">1.100.000đ</p>
+                <button class="btn btn-secondary">Thêm vào giỏ</button>
+            </div>
+            <div class="product-card" onclick="showPage('detail')">
+                <img src="h.jpg" alt="Lego">
+                <h4>Mô Hình Hoa Lan Bonsai</h4>
+                <p class="price">850.000đ</p>
+                <button class="btn btn-secondary">Thêm vào giỏ</button>
+            </div>
+            <div class="product-card" onclick="showPage('detail')">
+                <img src="kh.jpg" alt="Lego">
+                <h4>Khủng Long Bạo Chúa T-Rex</h4>
+                <p class="price">1.550.000đ</p>
+                <button class="btn btn-secondary">Thêm vào giỏ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="best-sellers" class="page">
+        <h2 class="section-title">TOP SẢN PHẨM BÁN CHẠY NHẤT</h2>
+        <div class="product-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="product-card" onclick="showPage('detail')" style="border-top: 4px solid #ffd700;">
+                <span style="position:absolute; top: 10px; left: 10px; background: #ffd700; color: #000; padding: 5px 10px; border-radius: 4px; font-weight: bold;">TOP 1</span>
+                <img src="feraari.jpg" alt="Lego" style="margin-top: 20px;">
+                <h4>Siêu Xe Ferrari Technic 42125</h4>
+                <p class="price">3.450.000đ</p>
+                <button class="btn btn-secondary">Thêm vào giỏ</button>
+            </div>
+            <div class="product-card" onclick="showPage('detail')" style="border-top: 4px solid #c0c0c0;">
+                <span style="position:absolute; top: 10px; left: 10px; background: #c0c0c0; color: #000; padding: 5px 10px; border-radius: 4px; font-weight: bold;">TOP 2</span>
+                <img src="https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&w=300&q=80" alt="Lego" style="margin-top: 20px;">
+                <h4>Tàu Thăm Dò Đại Dương</h4>
+                <p class="price">950.000đ</p>
+                <button class="btn btn-secondary">Thêm vào giỏ</button>
+            </div>
+            <div class="product-card" onclick="showPage('detail')" style="border-top: 4px solid #cd7f32;">
+                <span style="position:absolute; top: 10px; left: 10px; background: #cd7f32; color: #fff; padding: 5px 10px; border-radius: 4px; font-weight: bold;">TOP 3</span>
+                <img src="tr.jpg" alt="Lego" style="margin-top: 20px;">
+                <h4>Trạm Cảnh Sát Thành Phố</h4>
+                <p class="price">1.890.000đ</p>
+                <button class="btn btn-secondary">Thêm vào giỏ</button>
+            </div>
+            <div class="product-card" onclick="showPage('detail')">
+                <img src="https://images.unsplash.com/photo-1472457897821-70d3819a0e24?auto=format&fit=crop&w=300&q=80" alt="Lego" style="margin-top: 20px;">
+                <h4>Mô Hình Robot Biến Hình</h4>
+                <p class="price">620.000đ</p>
+                <button class="btn btn-secondary">Thêm vào giỏ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact" class="page">
+        <h2 class="section-title">LIÊN HỆ VỚI CHÚNG TÔI</h2>
+        <div style="display: flex; gap: 40px;">
+            <div style="flex: 1; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <h3>Gửi tin nhắn cho MYKINGDOM</h3>
+                <div class="form-group">
+                    <label>Họ và tên</label>
+                    <input type="text" placeholder="Nhập tên của bạn">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input type="text" placeholder="Nhập số điện thoại">
+                </div>
+                <div class="form-group">
+                    <label>Nội dung cần hỗ trợ</label>
+                    <textarea rows="5" placeholder="Bạn cần MYKINGDOM giúp gì?"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="alert('Cảm ơn bạn! Chúng tôi sẽ liên hệ lại sớm nhất.')">GỬI YÊU CẦU</button>
+            </div>
+            <div style="flex: 1;">
+                <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=600&q=80" alt="Contact Us" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
+                <h3>Thông tin cửa hàng</h3>
+                <p>📍 Địa chỉ: 99 Hòe Thị, Xuân Phương, Nam Từ Liêm, Hà Nội</p>
+                <p>📞 Hotline bán hàng: <strong>1900 6789</strong> (Miễn phí)</p>
+                <p>📧 Email hỗ trợ: hotro@mykingdom.vn</p>
+                <p>⏰ Giờ mở cửa: 08:00 - 22:00 (Tất cả các ngày trong tuần)</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="detail" class="page">
+        <div style="display: flex; gap: 40px; background: white; padding: 30px; border-radius: 12px;">
+            <div style="flex: 1;">
+                <img src="feraari.jpg" width="100%" style="border-radius: 10px;">
+            </div>
+            <div style="flex: 1.2;">
+                <span style="color: #888;">Mã SP: LEGO-42125</span>
+                <h1 style="margin: 10px 0;">Siêu Xe Ferrari Technic 42125 - Phiên Bản Đặc Biệt</h1>
+                <p class="price" style="font-size: 32px;">3.450.000đ</p>
+                <p style="background: #fff8f7; padding: 15px; border-left: 4px solid var(--primary);">Ưu đãi: Tặng kèm bộ minifigure kỷ niệm khi đặt hàng hôm nay.</p>
+                <div style="margin: 20px 0;">
+                    <button class="btn btn-primary" style="width: 200px;" onclick="showPage('cart')">MUA NGAY</button>
+                    <button class="btn btn-secondary" style="width: 200px;" onclick="alert('Đã thêm vào giỏ!')">THÊM GIỎ HÀNG</button>
+                </div>
+                <hr>
+                <h4>Mô tả chi tiết:</h4>
+                <p>Sản phẩm bao gồm hơn 1.600 mảnh ghép tinh xảo, tái hiện chân thực động cơ V8 và hệ thống treo của chiếc Ferrari đẳng cấp thế giới.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="login" class="page">
+        <div class="auth-container">
+            <h2>ĐĂNG NHẬP</h2>
+            <div class="form-group">
+                <label>Tên đăng nhập / Email</label>
+                <input type="text" placeholder="Nhập Email của bạn">
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" placeholder="Nhập mật khẩu">
+            </div>
+            <button class="btn btn-primary" onclick="showPage('home')">ĐĂNG NHẬP</button>
+            <p style="text-align: center; margin-top: 20px;">Chưa có tài khoản? <a href="#" onclick="showPage('register')" style="color: var(--primary); text-decoration: none; font-weight: bold;">Đăng ký miễn phí</a></p>
+        </div>
+    </div>
+
+    <div id="register" class="page">
+        <div class="auth-container">
+            <h2>TẠO TÀI KHOẢN MỚI</h2>
+            <div class="form-group">
+                <label>Họ và tên</label>
+                <input type="text" placeholder="Nhập họ tên của bạn">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="example@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" placeholder="Tối thiểu 6 ký tự">
+            </div>
+            <button class="btn btn-primary" onclick="alert('Đăng ký thành công!'); showPage('login')">ĐĂNG KÝ NGAY</button>
+            <p style="text-align: center; margin-top: 20px;">Đã có tài khoản? <a href="#" onclick="showPage('login')" style="color: var(--primary); text-decoration: none; font-weight: bold;">Đăng nhập</a></p>
+        </div>
+    </div>
+
+    <div id="cart" class="page">
+        <h2>GIỎ HÀNG CỦA BẠN</h2>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Đơn giá</th>
+                    <th>Số lượng</th>
+                    <th>Tổng cộng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <img src="feraari.jpg" class="cart-img" align="middle">
+                        Siêu Xe Ferrari Technic 42125
+                    </td>
+                    <td>3.450.000đ</td>
+                    <td><input type="number" value="1" style="width: 50px; text-align:center;"></td>
+                    <td class="price">3.450.000đ</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="text-align: right; margin-top: 30px;">
+            <h3>Thành tiền: <span class="price">3.450.000đ</span></h3>
+            <button class="btn btn-primary" style="width: 250px;" onclick="showPage('checkout')">TIẾN HÀNH THANH TOÁN</button>
+        </div>
+    </div>
+
+    <div id="checkout" class="page">
+        <h2>HOÀN TẤT ĐƠN HÀNG</h2>
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px;">
+            <div style="background: white; padding: 25px; border-radius: 12px;">
+                <h3>Thông tin giao hàng</h3>
+                <div class="form-group">
+                    <input type="text" placeholder="Họ và tên người nhận">
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Số điện thoại">
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Địa chỉ giao hàng chi tiết">
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Ghi chú đơn hàng..." rows="3"></textarea>
+                </div>
+            </div>
+            <div style="background: #fff8f7; padding: 25px; border-radius: 12px; border: 1px solid var(--primary); height: fit-content;">
+                <h3>Tóm tắt đơn hàng</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Tạm tính:</span>
+                    <span>3.450.000đ</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Phí vận chuyển:</span>
+                    <span>Miễn phí</span>
+                </div>
+                <hr>
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 20px; margin-top: 10px;">
+                    <span>Tổng cộng:</span>
+                    <span class="price">3.450.000đ</span>
+                </div>
+                <button class="btn btn-primary" style="margin-top: 25px;" onclick="alert('Đã đặt hàng thành công! Cảm ơn bạn.'); showPage('home', document.querySelectorAll('nav a')[0])">XÁC NHẬN ĐẶT HÀNG</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div>
+            <h2 style="color: white; margin-bottom: 20px;">MYKINGDOM</h2>
+            <p>Hệ thống bán lẻ đồ chơi Lego chính hãng lớn nhất Việt Nam, nơi khơi nguồn sáng tạo cho bé.</p>
+        </div>
+        <div>
+            <h4>HỖ TRỢ KHÁCH HÀNG</h4>
+            <p>Chính sách bảo mật</p>
+            <p>Chính sách vận chuyển</p>
+            <p>Chính sách đổi trả</p>
+        </div>
+        <div>
+            <h4>LIÊN HỆ</h4>
+            <p>📍 99 Hòe Thị, Xuân Phương, Nam Từ Liêm, Hà Nội</p>
+            <p>📞 1900 6789</p>
+            <p>📧 support@mykingdom.vn</p>
+        </div>
+        <div>
+            <h4>THANH TOÁN</h4>
+            <img src="https://img.icons8.com/color/48/visa.png"/>
+            <img src="https://img.icons8.com/color/48/mastercard.png"/>
+            <img src="https://img.icons8.com/color/48/paypal.png"/>
+        </div>
+    </footer>
+
+    <script>
+        function showPage(pageId, navElement = null) {
+            // 1. Ẩn tất cả các trang
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(p => p.classList.remove('active'));
+            
+            // 2. Hiện trang được chọn
+            const target = document.getElementById(pageId);
+            if(target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // 3. Xử lý hiệu ứng gạch chân cho thanh Nav Menu
+            if(navElement) {
+                const links = document.querySelectorAll('nav a');
+                links.forEach(link => link.classList.remove('active-link'));
+                navElement.classList.add('active-link');
+            } else {
+                // Nếu click từ các nút không thuộc Nav (như Logo, Giỏ hàng), xóa highlight Nav
+                document.querySelectorAll('nav a').forEach(link => link.classList.remove('active-link'));
+            }
+        }
+    </script>
+</body>
+</html>
